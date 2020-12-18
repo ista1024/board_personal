@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Personal_project">
+	<!--<select id="accountBookList" resultType="project">
+		select dates, idx, event_label, income, expense, note, currency
+		from account_book
+		where userid = #{userid}
+		order by dates desc
+	</select>-->
+	
+	<select id="loginCheck" resultType="pj_member">
+		select name, member_rank, join_date
+		from jsp_member
+		where userid = #{userid} and passwd = #{passwd}
+	</select>
+	
+	<select id="memberList" resultType="pj_member">
+		select userid, passwd, name, member_rank, join_date
+		from jsp_member
+		order by userno
+	</select>
+	
+	<select id="checkRank" resultType="int">
+		select member_rank
+		from jsp_member
+		where userid = #{userid}
+	</select>
+	
+	<select id="joinCheck" resultType="String">
+		select userid
+		from jsp_member
+		where userid = #{userid}
+	</select>
+	
+	<select id="boardListCount" resultType="int">
+		select count(*) 
+		from jsp_board
+	</select>
+	
+	<select id="boardList" resultType="pj_board">
+		select *
+		from (
+		    select A.*, rownum as rn
+		    from (
+				select num, userid, subject, reg_date, readcount, filename, filesize, down, re_level, 
+					(select count(*) from jsp_board_comment where board_num = num) 
+					comment_count, check_member, show
+				from jsp_board
+				order by ref desc, re_step
+		    ) A
+		)
+		where rn between #{start} and #{end} 
+	</select>
+	
+	<select id="viewBoardContent" resultType="pj_board">
+		select *
+		from jsp_board
+		where num = #{num}
+	</select>
+	
+	<select id="searchBoard" resultType="pj_board">
+		select num, userid, subject, reg_date, readcount, filename, filesize, down, re_level,
+			(select count(*) from jsp_board_comment where board_num = num) comment_count, check_member, check_member, show 
+		from jsp_board
+		<choose>
+			<when test="search_option == 'userid'">
+				where userid like #{keyword} and show = 'y'
+			</when>
+			<when test="search_option == 'subject'">
+				where subject like #{keyword} and show = 'y'
+			</when>
+			<when test="search_option == 'content'">
+				where content like #{keyword} and show = 'y'
+			</when>
+			<otherwise>
+				where (userid like #{keyword} or subject like #{keyword} or content like #{keyword}) and show = 'y'
+			</otherwise>
+		</choose>
+		order by ref desc, re_step asc
+	</select>
+	
+	<select id="commentList" resultType="pj_comment">
+		select comment_num, board_num, userid, comment_re_level, content, reg_date, check_member
+		from jsp_board_comment
+		where board_num = #{board_num}
+		order by comment_ref desc, comment_re_step
+	</select>
+	
+	<select id="commentView" resultType="pj_comment">
+		select *
+		from jsp_board_comment
+		where comment_num = #{comment_num}
+	</select>
+	
+	<select id="getFileName" resultType="String">
+		select filename
+		from jsp_board
+		where num = #{num}
+	</select>
+	
+	<select id="boardPass_check" resultType="String">
+		select passwd
+		from jsp_board
+		where num = #{num} and passwd = #{passwd}
+	</select>
+	
+	<insert id="joinMember">
+		insert into jsp_member (userid, passwd, name, userno) 
+		values (#{userid}, #{passwd}, #{name}, (select nvl(max(userno)+1,1) from jsp_member))
+	</insert>
+	
+	<insert id="insertBoard">
+		insert into jsp_board (num, userid, subject, passwd, ref, re_step, re_level, content, ip, filename, filesize, check_member) 
+		values ((select nvl(max(num)+1, 1) from jsp_board), #{userid}, #{subject}, #{passwd}, 
+			(select nvl(max(num)+1, 1) from jsp_board), 1, 0, #{content}, #{ip}, #{filename}, #{filesize}, #{check_member})
+	</insert>
+	
+	<insert id="addComment">
+		insert into jsp_board_comment (comment_num, board_num, userid, comment_ref, comment_re_step, comment_re_level, content, check_member) 
+		values ((select nvl(max(comment_num)+1, 1) from jsp_board_comment), #{board_num}, #{userid},
+			(select (nvl(max(comment_ref)+1, 1)) from jsp_board_comment where board_num = #{board_num}), 1, 0, #{content}, #{check_member})
+	</insert>
+	
+	<insert id="insertBoardReply">
+		insert into jsp_board (num, userid, subject, passwd, ref, re_step, re_level, content, ip, filename, filesize, check_member)
+		values ((select nvl(max(num)+1, 1) from jsp_board), #{userid}, #{subject}, #{passwd}, 
+			#{ref}, #{re_step}, #{re_level}, #{content}, #{ip}, #{filename}, #{filesize}, #{check_member})	
+	</insert>
+	
+	<insert id="addCommentReply">
+		insert into jsp_board_comment (comment_num, board_num, userid, comment_ref, comment_re_step, comment_re_level, content, check_member) 
+		values ((select nvl(max(comment_num)+1, 1) from jsp_board_comment), #{board_num}, #{userid},
+			#{comment_ref}, #{comment_re_step}, #{comment_re_level}, #{content}, #{check_member})
+	</insert>
+	
+	<delete id="deleteAllMember">
+		delete from jsp_member 
+		where userno >= 2
+	</delete>
+	
+	<delete id="deleteAllComment">
+		delete from jsp_board_comment 
+		where comment_num > 11
+	</delete>
+	
+	<delete id="deleteAllBoard">
+		delete from jsp_board 
+		where num > 11
+	</delete>
+	
+	<update id="updateMember">
+		update jsp_member 
+		set userid = #{userid}, name = #{name}, member_rank = #{member_rank}
+		where userid = #{beforeUserid}
+	</update>
+	
+	<update id="plusDown">
+		update jsp_board 
+		set down = down+1 
+		where num = #{num}
+	</update>
+	
+	<update id="plusReadCount">
+		update jsp_board 
+		set readcount = readcount + 1 
+		where num = #{num}
+	</update>
+	
+	<update id="updateBoard">
+		update jsp_board 
+		set userid = #{userid}, passwd = #{passwd}, subject = #{subject}, content = #{content},
+			filename = #{filename}, filesize = #{filesize}, down = #{down}
+		where num = #{num}
+	</update>
+	
+	<update id="deleteBoard">
+		update jsp_board 
+		set show = 'n'
+		where num = #{num}
+	</update>
+	
+	<update id="deleteBoardByManager">
+		update jsp_board 
+		set show = 'd'
+		where num = #{num}
+	</update>
+	
+	<update id="updateStep">
+		update jsp_board 
+		set re_step = re_step + 1
+		where ref = #{ref} and re_step >= #{re_step}
+	</update>
+	
+	<update id="updateCommentStep">
+		update jsp_board_comment 
+		set comment_re_step = comment_re_step + 1
+		where board_num = #{board_num} and comment_ref = #{comment_ref} and comment_re_step >= #{comment_re_step}
+	</update>
+	
+</mapper>

@@ -1,0 +1,190 @@
+@charset "UTF-8";
+			html,
+			body {
+				margin: 0;
+				width: 100%;
+				height: 100%;
+			}
+			#header {
+				position: fixed;
+				width: 100%;
+				height: 25%;
+				color: #ffffff;
+				background: none;
+				font-family: 'Gugi', cursive;
+				padding-left: 5%;
+				z-index: 3;
+			}
+			#header #title {
+				display: inline;
+				float: left;
+			}
+			#header #nav {
+				color: black;
+				display: none;
+				float: right;
+				bottom: 0;
+				width: 400px;
+				background: none;
+				font-size: 18px;
+				font-family: 'Jua', sans-serif;
+				animation-name: navbarShowUp;
+				animation-duration: 2s;
+			}
+			#header #nav .table {
+				width: 100px;
+				text-align: center;
+			}
+			#navTd2 {
+				width: 230px;
+			}
+			@media screen and (max-width: 700px) {
+				/* 화면 사이즈가 700px이하일 때 */
+				#header {
+					padding-top: 0px;
+				}
+				#header #nav {
+					right: 0px;
+				}
+			}
+			@media screen and (min-width: 700px) {
+				/* 화면 사이즈가 700px이상일 때 */
+				#header {
+					padding-top: 50px;
+				}
+				#header #nav {
+					right: 100px;
+				}
+			}
+			#header h2 {
+				color: #ffffff;
+				font-size: 40px;
+			}
+			#hd {
+				position: fixed;
+				padding: 0px;
+				height: 25%;
+				width: 100%;
+				overflow: hidden;
+				margin: 0px auto;
+				z-index: 2;
+				transition: all 2s;
+				background: #404040;
+			}
+			#hd.extended {
+				height: 100%;
+				transition: all 2s;
+			}
+			#header_padding {
+				height: 25%;
+			}
+			video {
+				min-width: 100%;
+				min-height: 100%;
+			}
+			.boxwrap {
+				display: table;
+				table-layout: fixed;
+				width: 300%;
+				height: 75%;
+				table-layout: fixed;
+				font-family: 'Jua', sans-serif;
+				text-shadow: 2px 2px 8px #4747d1;
+			}
+			#wrapNav {
+				position: fixed;
+				color: black;
+				width: 400px;
+				top: 250px;
+				right: 40px;
+				background: none;
+				font-size: 18px;
+				font-family: 'Jua', sans-serif;
+				animation-name: navbarShowUp;
+				animation-duration: 2s;
+				z-index: 1;
+			}
+			.box {
+				display: table-cell;
+				position: relative;
+				color: #fff;
+				font-size: 24pt;
+				padding-left: 80px;
+				padding-top: 40px;
+				padding-right: 40px;
+			}
+			.box p{
+				color: #ffffff;
+				font-size: 30pt;
+			}
+			.box[class~='1'] {
+				background-image: linear-gradient(to bottom right, #cceeff, #ffcccc);
+			}
+			#loginTable {
+				color: #751aff;
+				text-shadow: none;
+			}
+			.box[class~='1'] .table {
+				font-size: 18pt;
+			}
+			.box[class~='1'] #btnRollback {
+				font-family: 'Jua', sans-serif;
+			}
+			.box[class~='2'] {
+				background-image: linear-gradient(to bottom right, #ffcccc, #fff2cc);
+			}
+			#box2 {
+				color: #000000;
+				font-size: 11pt;
+				text-shadow: none;
+			}
+			#login1 {
+				position: relative;
+				width: 40%;
+			}
+			#login2 {
+				position: absolute;
+				top: 138px;
+				left: 50%;
+				width: 40%;
+				text-shadow: none;
+				color: #000000;
+				font-size: 12pt;
+			}
+			#login2 table{
+				width: 100%;
+				overflow-y: auto;
+				background-color: white;
+				border: 1px solid black;
+			}
+			#login2 #memberListTable {
+				overflow-y: auto;
+			}
+			#box2 table{
+				border: 1px black solid;
+				background-color: white;
+			}
+			td {
+				min-width: 40px;
+			}
+			.box[class~='3'] {
+				background-image: linear-gradient(to bottom right, #fff2cc, #ccccff);
+			}
+			.box[class~='4'] {
+				background-image: linear-gradient(to bottom right, #ccccff, #d9ffcc);
+			}
+			#checkbox_label{
+				color: #000000;
+				font-size: 14pt;
+				text-shadow: none;
+			}
+			@keyframes navbarShowUp {
+				0% {opacity: 0;}
+				50% {opacity: 0.5;}
+				100% {opacity: 0.1;}
+			}
+			@keyframes navbarBlink {
+				0% {opacity: 0;}
+				50% {opacity: 0.5;}
+				100% {opacity: 0.1;}
+			}

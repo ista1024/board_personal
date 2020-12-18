@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- xml 지시어 https://blog.mybatis.org/search?q=dtd 에서도 복사가능-->
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 알리아스 설정 : resultType에서 쓸 긴 줄을 간략하게 바꿈
+		type="실제전체경로" alias="줄임말" -->
+	<typeAliases>
+		<typeAlias type="personal_project.dto.Personal_project_MemberDTO" alias="pj_member"/>
+		<typeAlias type="personal_project.dto.Personal_project_BoardDTO" alias="pj_board"/>
+		<typeAlias type="personal_project.dto.Personal_project_CommentDTO" alias="pj_comment"/>
+	</typeAliases>
+	
+	<!-- db연결 참조코드(context.xml과 연결됨) -->
+	<environments default="">
+		<environment id="">
+			<transactionManager type="JDBC" />
+			<dataSource type="JNDI">
+				<property name="data_source" 
+					value="java:comp/env/oraDB" />
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!-- 실제 sql query -->
+	<mappers>
+		<mapper resource="/personal_project/mapper/Personal_project.xml" />
+	</mappers>
+</configuration>
