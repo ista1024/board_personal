@@ -141,6 +141,9 @@
 						data: param,
 						success: function(result) {
 							$('#join_result').html(result);
+							userid.value = "";
+							passwd.value = "";
+							name.value = "";
 						}
 					}); // ajax
 				}
